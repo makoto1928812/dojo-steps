@@ -1,8 +1,12 @@
 # Dojo Steps
 
+<img src="assets/logo.png" alt="Dojo Steps logo" width="160">
+
 Flip the steps, copy the moves, earn your certificate.
 
 - ▶ **Try it:** https://makoto1928812.github.io/dojo-steps/
+- 🎤 **Pitch video:** https://makoto1928812.github.io/dojo-steps/pitch.mp4
+- 📄 **Pitch deck (PDF):** [pitch.pdf](pitch.pdf)
 
 ## About
 
@@ -42,3 +46,5 @@ The full conversation is in [IDEA.md](IDEA.md) (Japanese).
 
 - `index.html` — the app (a single self-contained file)
 - `IDEA.md` — the idea log
+- `pitch.pdf` — the pitch deck
+- `assets/logo.png` — the logo
