@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; media-src data: blob:; base-uri 'none'; form-action 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dojo Steps</title>
+<style>
+:root{--paper:#f3ead7;--card:#fffaf0;--ink:#1a1a1a;--red:#b71c1c;--dred:#7f1212;--mute:#5a5248}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",system-ui,serif;line-height:1.6;
+background-image:radial-gradient(rgba(120,90,40,.07) 1px,transparent 1px);background-size:14px 14px}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid #1565c0;outline-offset:2px}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;max-width:760px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:8px;font-weight:bold;font-size:18px;background:none;border:0;padding:4px}
+.brand .mini{width:30px;height:30px;background:var(--red);color:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;transform:rotate(-4deg)}
+.lang{display:flex;border:2px solid var(--ink);border-radius:20px;overflow:hidden}
+.lang button{border:0;background:var(--card);padding:4px 12px;font-size:13px;font-weight:bold}
+.lang button[aria-pressed=true]{background:var(--ink);color:#fff}
+main{max-width:760px;margin:0 auto;padding:0 16px 40px}
+.hero{text-align:center;padding:14px 0 8px}
+.seal{width:84px;height:84px;margin:0 auto;background:var(--red);color:#fff;border-radius:8px;font-size:50px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 var(--ink);transform:rotate(-4deg);animation:pop .7s ease-out}
+@keyframes pop{from{transform:rotate(-20deg) scale(.5);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+h1{font-size:36px;margin:20px 0 4px;display:inline-block;border-bottom:4px solid var(--ink);padding:0 10px 4px;line-height:1.2}
+.tag{color:var(--red);letter-spacing:3px;font-weight:bold;font-size:14px;margin:12px 0 0}
+.pitch{color:var(--mute);font-size:14px;max-width:460px;margin:8px auto 0}
+.btn{display:inline-block;background:var(--red);color:#fff;border:0;border-radius:30px;padding:12px 34px;font-size:17px;font-weight:bold;box-shadow:0 5px 0 var(--dred);transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--dred)}
+.btn.ghost{background:var(--card);color:var(--ink);border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);padding:9px 24px}
+.btn[disabled]{background:#c9bfae;box-shadow:0 5px 0 #9c917e;cursor:not-allowed;color:#4a4338}
+.sec{margin-top:28px}
+.eyebrow{font-size:12px;color:var(--red);font-weight:bold;letter-spacing:3px}
+h2{font-size:24px;margin:2px 0 12px}
+.box{background:var(--card);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--red);border-radius:4px}
+.gj{display:flex;gap:12px}
+.gj button{flex:1;text-align:center;padding:12px 6px;background:var(--card);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--red);border-radius:4px}
+.gj button[aria-pressed=true]{background:#f9e3dc;transform:translate(2px,2px);box-shadow:3px 3px 0 var(--red)}
+.gj .k{font-size:50px;font-weight:bold;line-height:1.2}
+.gj .k.r{color:var(--red)}
+.gj small{display:block;font-size:13px}
+.say{display:flex;gap:10px;align-items:center;margin-top:18px}
+.face{flex:none;width:58px;height:58px;border:3px solid var(--ink);border-radius:50%;background:var(--card);font-size:34px;text-align:center;line-height:52px}
+.bub{flex:1;background:var(--card);border:3px solid var(--red);border-radius:14px;padding:10px 12px;font-size:14px;position:relative}
+.techs{display:grid;gap:14px}
+.tech{display:flex;align-items:center;gap:14px;padding:14px;text-align:left;width:100%;background:var(--card);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--red);border-radius:4px;transition:transform .1s}
+.tech:hover{transform:translate(-2px,-2px)}
+.tech .ic{font-size:40px;width:64px;height:64px;border:3px solid var(--ink);border-radius:12px;background:#fff;text-align:center;line-height:58px;flex:none}
+.tech b{font-size:20px;display:block}
+.tech span.s{font-size:13px;color:var(--mute)}
+.tech .st{margin-left:auto;font-size:12px;font-weight:bold;color:var(--red);white-space:nowrap}
+.tech.done .st{background:var(--red);color:#fff;padding:3px 10px;border-radius:12px}
+.prog{height:10px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden;margin:6px 0 12px}
+.prog i{display:block;height:100%;background:var(--red);transition:width .4s}
+.toast{background:var(--ink);color:#fff;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:14px;text-align:center;animation:pop2 .3s}
+@keyframes pop2{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.center{text-align:center}
+.lesson-top{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.back{background:none;border:0;font-weight:bold;color:var(--red);padding:6px 0;font-size:15px}
+.step{max-width:460px;margin:12px auto 0;padding:18px 16px;text-align:center}
+.step .fig{width:210px;max-width:80%;height:150px;margin:12px auto;background:#fff;border:4px solid var(--ink);border-radius:16px;font-size:80px;line-height:142px;animation:flip .35s}
+@keyframes flip{from{transform:rotateY(80deg);opacity:0}to{transform:none;opacity:1}}
+.step .ti{font-size:22px;font-weight:bold}
+.step .de{font-size:15px;color:#3a352d}
+.step .say{text-align:left;border-top:1px dashed #999;padding-top:14px}
+.dots{color:var(--red);letter-spacing:8px;font-size:16px;margin:14px 0 4px}
+.nav{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.cert{max-width:460px;margin:14px auto;background:#fff;border:7px double var(--red);padding:24px 16px;text-align:center;animation:pop2 .5s}
+.cert h2{font-size:32px;letter-spacing:10px;margin:0}
+.cert .big{font-size:56px;margin:6px 0}
+.cert .nm{font-size:22px;font-weight:bold;border-bottom:2px solid var(--ink);display:inline-block;min-width:160px;padding:0 14px;word-break:break-word}
+.cert .mb{background:var(--card);border:2px solid var(--red);border-radius:8px;padding:10px;font-size:14px;text-align:left;margin-top:14px}
+.cert .hanko{display:inline-block;margin-top:14px;background:var(--red);color:#fff;padding:6px 16px;border-radius:4px;font-weight:bold;transform:rotate(-3deg)}
+.namebox{max-width:460px;margin:10px auto;text-align:center}
+.namebox label{font-size:14px;font-weight:bold;display:block;margin-bottom:4px}
+.namebox input{width:100%;max-width:320px;font:inherit;font-size:16px;padding:10px 12px;border:3px solid var(--ink);border-radius:4px;background:var(--card)}
+.date{font-size:13px;color:var(--mute);margin-top:10px}
+@media print{header,.namebox,.nav,.toast{display:none}body{background:#fff}}
+@media(min-width:640px){.techs{grid-template-columns:repeat(3,1fr)}.tech{flex-direction:column;text-align:center}.tech .st{margin:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <button class="brand" data-demo="home-logo" id="logo"><span class="mini">空</span><span>Dojo Steps</span></button>
+  <div class="lang" data-demo="lang-switch" role="group" aria-label="Language">
+    <button id="l-ja" data-lang="ja" data-demo="lang-ja">日本語</button>
+    <button id="l-en" data-lang="en" data-demo="lang-en">EN</button>
+  </div>
+</header>
+<main id="app" data-demo="app-area"></main>
+
+<script>
+const I18N = {
+ja:{
+ title:"Dojo Steps｜はじめての空手の基本技",
+ langAria:"言語",
+ logoAria:"ホームにもどる",
+ tag:"はじめての基本技",
+ pitch:"師範のひとことを聞きながら、ステップをめくって空手の基本技を体験しよう。3つ終えると修了証がもらえます。",
+ start:"はじめる ▶",
+ cont:"つづきから ▶",
+ gjEye:"流派のはなし",
+ gjTitle:"剛柔流とは？",
+ gjHard:"かたく、強く",
+ gjSoft:"しなやかに、受ける",
+ gjSay:{breath:"剛と柔、どちらも大切じゃ。息を深く吐いて、力をぬく。そこから強さが生まれるぞ。",hard:"「剛」は鍛えた体で正面から強く打つ力じゃ。突きも蹴りも、腰と足でしっかり支えるのじゃぞ。",soft:"「柔」は相手の力を受け流すしなやかさじゃ。力みすぎず、息に合わせて体をやわらかく使うのじゃ。"},
+ gjHint:"剛・柔をタップしてみよう",
+ trEye:"基本技ミニ体験",
+ trTitle:"3つの技をやってみよう",
+ progress:(n)=>`${n} / 3 修了`,
+ stDone:"修了 ✓",
+ stGo:"体験する",
+ step:"STEP",
+ prev:"◀ もどる",
+ next:"次へ ▶",
+ finish:"できた！ 押忍！",
+ home:"◀ ホーム",
+ master:"師範",
+ certBtn:"🏅 修了証を見る",
+ certLocked:(n)=>`あと ${n} つで修了証がもらえます`,
+ toast:(n)=>`「${n}」を修了！ 押忍！`,
+ certTitle:"修了証",
+ certTop:"空手 基本技入門",
+ certTo:"殿",
+ certYou:"あなた",
+ certBody:"基本技 3つ（構え・正拳突き・前蹴り）を体験しました。",
+ certMaster:"師範の言葉",
+ certWords:"「剛は柔を助け、柔は剛を活かす。息を深く吐いて、これからも稽古にはげむのじゃ。」",
+ oss:"押忍！",
+ nameLabel:"修了証に入れる名前",
+ namePh:"例：たなか はるか",
+ print:"🖨 印刷・保存",
+ reset:"もう一度はじめる",
+ resetMsg:"記録をリセットしました。",
+ fig:"手順のイラスト",
+ tech:{
+  kamae:{name:"構え",roman:"Kamae",intro:"すべての技の土台になる立ち方",steps:[
+   ["足を肩はばに開く","まっすぐ立って、足を肩はばに。つま先は前へ向けます。","「まずは地面とお友だちになるのじゃ。足の裏全体で立つのがコツじゃ！」"],
+   ["片足を半歩ひく","利き足と反対の足を、半歩前に出します。体は少し斜めに。","「前後の足は一直線にならぬようにな。横にも少し幅をとると、ぐらつかんぞ」"],
+   ["ひざをゆるめる","ひざを軽く曲げて、腰を少し落とします。上半身は力をぬいて。","「ひざがかたいと動けぬ。ゆるめて、息を吐く。これぞ柔の心じゃ」"],
+   ["拳をあげて構える","両手をにぎり、あごと胸を守る位置に。肩の力はぬきます。","「目は相手の胸あたりを見るのじゃ。構えたら、ふっと息を吐くのじゃぞ」"]]},
+  seiken:{name:"正拳突き",roman:"Seiken-zuki",intro:"拳を正面にまっすぐ突く、空手の基本の突き",steps:[
+   ["拳をにぎる","指を内側へ丸め、親指を外から人差し指と中指にかぶせます。","「親指を中にいれると痛めるぞ。外からしっかりかぶせるのじゃ」"],
+   ["拳を腰にひく","脇をしめて、拳は上向きに。反対の手は前にのばします。","「脇をしめるのがコツじゃ！ 肘が開くと力が逃げるぞ」"],
+   ["ひねりながら突く","まっすぐ前へ。当たる直前に拳をぐっとひねって、手の甲を上に。","「腕だけで突くでない。腰のひねりを、拳まで届けるのじゃ」"],
+   ["息を吐いてもどす","突いた瞬間に「フッ」と息を吐き、すばやく腰へもどします。","「突いたあとが大事じゃ。息を吐ききって、また構えに戻るのじゃ」"]]},
+  maegeri:{name:"前蹴り",roman:"Mae-geri",intro:"ひざを引き上げて、前へ蹴り出す基本の蹴り",steps:[
+   ["ひざを引き上げる","構えから、後ろ足のひざを胸のほうへ高く引き上げます。","「まずはひざじゃ。足先より先に、ひざを持ち上げるのじゃ」"],
+   ["つま先を反らす","足の指を上へ反らし、足の指のつけ根（母指球）で当てる準備を。","「指先で蹴ると痛いぞ。つけ根の硬いところを使うのじゃ」"],
+   ["前へ蹴り出す","ひざから先をスッとのばし、腰を前に押し出して蹴ります。","「軸足のかかとは浮かさぬことじゃ。ぐらついたら、もう一度やればよい」"],
+   ["すばやくもどす","蹴ったら、ひざをたたんで元の構えへ。足はそっと下ろします。","「蹴りっぱなしはいかん。もどす力が、本当の強さじゃ」"]]}
+ }
+},
+en:{
+ title:"Dojo Steps | Your First Karate Basics",
+ langAria:"Language",
+ logoAria:"Back to home",
+ tag:"YOUR FIRST BASICS",
+ pitch:"Flip through the steps, copy the moves, and listen to the master's tips. Finish all 3 techniques to earn a certificate.",
+ start:"Start ▶",
+ cont:"Continue ▶",
+ gjEye:"ABOUT THE STYLE",
+ gjTitle:"What is Goju-ryu?",
+ gjHard:"Strong and firm",
+ gjSoft:"Flexible, receiving",
+ gjSay:{breath:"Both hard and soft matter, my friend. Breathe out deeply and let go of tension. Strength grows from there.",hard:"“Go” is the power to strike straight on with a trained body. Support every punch and kick with your hips and legs.",soft:"“Ju” is the flexibility to redirect force. Don't tense up. Move softly with your breath."},
+ gjHint:"Tap Hard or Soft",
+ trEye:"MINI BASICS",
+ trTitle:"Try 3 techniques",
+ progress:(n)=>`${n} / 3 done`,
+ stDone:"Done ✓",
+ stGo:"Try it",
+ step:"STEP",
+ prev:"◀ Back",
+ next:"Next ▶",
+ finish:"Got it! Osu!",
+ home:"◀ Home",
+ master:"Master",
+ certBtn:"🏅 See my certificate",
+ certLocked:(n)=>`${n} more to earn your certificate`,
+ toast:(n)=>`“${n}” complete! Osu!`,
+ certTitle:"Certificate",
+ certTop:"Karate Basics Introduction",
+ certTo:"",
+ certYou:"You",
+ certBody:"You tried 3 basic techniques: stance, straight punch and front kick.",
+ certMaster:"Master's words",
+ certWords:"“Hard helps soft, and soft brings out hard. Breathe out deeply and keep up your training.”",
+ oss:"Osu!",
+ nameLabel:"Name for your certificate",
+ namePh:"e.g. Haruka Tanaka",
+ print:"🖨 Print / Save",
+ reset:"Start over",
+ resetMsg:"Your progress was reset.",
+ fig:"Step illustration",
+ tech:{
+  kamae:{name:"Stance",roman:"Kamae",intro:"The base of every technique",steps:[
+   ["Feet shoulder-width apart","Stand tall with your feet as wide as your shoulders. Toes point forward.","“First, make friends with the floor. Stand on your whole foot, that's the trick!”"],
+   ["Step one foot back","Move the foot opposite your strong side half a step forward. Turn your body slightly.","“Don't line your feet up in one line. A little width side to side keeps you steady.”"],
+   ["Soften your knees","Bend your knees a little and lower your hips. Relax your upper body.","“Stiff knees can't move. Soften them and breathe out. That's the spirit of Ju.”"],
+   ["Raise your fists","Make fists and guard your chin and chest. Keep your shoulders loose.","“Look at your partner's chest. When you're set, breathe out softly.”"]]},
+  seiken:{name:"Straight Punch",roman:"Seiken-zuki",intro:"The basic punch, straight to the front",steps:[
+   ["Make a fist","Curl your fingers in and wrap your thumb over the outside of your first two fingers.","“Tuck your thumb inside and you'll hurt it. Wrap it over the outside!”"],
+   ["Pull the fist to your hip","Keep your elbow tight to your side, fist facing up. The other hand reaches forward.","“Keep your elbow in, that's the tip! If it opens, your power leaks out.”"],
+   ["Twist and punch","Go straight ahead. Just before the hit, twist the fist so the back of your hand faces up.","“Don't punch with just your arm. Send the twist of your hips all the way to your fist.”"],
+   ["Breathe out and return","Breathe out with a “Fuh!” as you punch, then bring the fist back to your hip fast.","“What happens after the punch matters. Breathe out fully and return to your stance.”"]]},
+  maegeri:{name:"Front Kick",roman:"Mae-geri",intro:"Lift your knee, then kick straight ahead",steps:[
+   ["Lift your knee","From your stance, raise your back knee high toward your chest.","“The knee goes first. Lift it before your foot.”"],
+   ["Pull your toes back","Bend your toes up and get ready to hit with the ball of your foot.","“Kicking with your toes hurts. Use the hard ball of your foot.”"],
+   ["Kick forward","Snap your lower leg out and push your hips forward as you kick.","“Keep the heel of your standing foot down. If you wobble, just try again.”"],
+   ["Return quickly","After the kick, fold your knee back to your stance and lower your foot gently.","“Don't leave your leg out there. Bringing it back is true strength.”"]]}
+ }
+}};
+
+const TECH=[
+ {id:"kamae",icon:"🧍",figs:["🦶","👣","🧎","✊"]},
+ {id:"seiken",icon:"👊",figs:["✊","🥋","👊","🌬️"]},
+ {id:"maegeri",icon:"🦵",figs:["🦵","🦶","💥","↩️"]}
+];
+
+let lang="en";
+try{
+ if(window.APP_LANG==="ja"||window.APP_LANG==="en") lang=window.APP_LANG;
+ else{
+  const q=new URLSearchParams(location.search).get("lang");
+  if(q==="ja"||q==="en") lang=q;
+  else{ let s=null; try{s=localStorage.getItem("lang")}catch(e){} if(s==="ja"||s==="en") lang=s; }
+ }
+}catch(e){}
+
+let done=[],name="";
+try{done=JSON.parse(localStorage.getItem("dojo_done")||"[]");if(!Array.isArray(done))done=[]}catch(e){done=[]}
+try{name=localStorage.getItem("dojo_name")||""}catch(e){}
+function save(){try{localStorage.setItem("dojo_done",JSON.stringify(done));localStorage.setItem("dojo_name",name)}catch(e){}}
+
+let view="home",ti=0,si=0,gj="breath",toast="";
+const T=()=>I18N[lang];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function applyStatic(){
+ const t=T();
+ document.documentElement.lang=lang;
+ document.title=t.title;
+ document.querySelector(".lang").setAttribute("aria-label",t.langAria);
+ $("logo").setAttribute("aria-label",t.logoAria);
+ ["ja","en"].forEach(l=>$("l-"+l).setAttribute("aria-pressed",String(l===lang)));
+}
+
+function render(){
+ applyStatic();
+ const t=T(),app=$("app");
+ if(view==="home") app.innerHTML=homeHTML(t);
+ else if(view==="lesson") app.innerHTML=lessonHTML(t);
+ else app.innerHTML=certHTML(t);
+ bind();
+}
+
+function masterSay(txt,extra=""){
+ return `<div class="say"><div class="face" role="img" aria-label="${esc(T().master)}">🧓</div><div class="bub" data-demo="master-say${extra}">${esc(txt)}</div></div>`;
+}
+
+function homeHTML(t){
+ const n=done.length,all=n>=3;
+ let h=`<section class="hero"><div class="seal" aria-hidden="true">空</div><h1>Dojo Steps</h1><p class="tag">${t.tag}</p><p class="pitch">${t.pitch}</p>
+ <p><button class="btn" data-demo="start-btn" id="start">${n>0&&!all?t.cont:t.start}</button></p></section>`;
+ if(toast) h+=`<div class="toast" role="status" data-demo="toast">${esc(toast)}</div>`;
+ h+=`<section class="sec"><div class="eyebrow">${t.gjEye}</div><h2>${t.gjTitle}</h2>
+ <div class="gj">
+  <button data-demo="goju-hard" data-gj="hard" aria-pressed="${gj==="hard"}"><div class="k r">剛</div><small>${t.gjHard}<br>Hard</small></button>
+  <button data-demo="goju-soft" data-gj="soft" aria-pressed="${gj==="soft"}"><div class="k">柔</div><small>${t.gjSoft}<br>Soft</small></button>
+ </div>${masterSay(t.gjSay[gj],"-goju")}<p class="center" style="font-size:12px;color:var(--mute);margin:8px 0 0">${t.gjHint}</p></section>`;
+ h+=`<section class="sec"><div class="eyebrow">${t.trEye}</div><h2>${t.trTitle}</h2>
+ <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="${n}"><i style="width:${n/3*100}%"></i></div>
+ <div class="center" style="font-size:13px;font-weight:bold;margin:-6px 0 12px" data-demo="progress">${t.progress(n)}</div>
+ <div class="techs" data-demo="tech-list">`;
+ TECH.forEach((x,i)=>{
+  const d=done.includes(x.id),tx=t.tech[x.id];
+  h+=`<button class="tech${d?" done":""}" data-demo="tech-${x.id}" data-i="${i}"><span class="ic" aria-hidden="true">${x.icon}</span><span><b>${tx.name}</b><span class="s">${tx.roman}・${esc(tx.intro)}</span></span><span class="st">${d?t.stDone:t.stGo}</span></button>`;
+ });
+ h+=`</div><div class="center" style="margin-top:22px">`;
+ h+= all?`<button class="btn" data-demo="cert-btn" id="certBtn">${t.certBtn}</button>`
+        :`<button class="btn" disabled data-demo="cert-btn-locked">${t.certBtn}</button><p style="font-size:13px;color:var(--mute)">${t.certLocked(3-n)}</p>`;
+ if(n>0) h+=`<p><button class="back" data-demo="reset-btn" id="reset" style="color:var(--mute)">${t.reset}</button></p>`;
+ h+=`</div></section>`;
+ return h;
+}
+
+function lessonHTML(t){
+ const x=TECH[ti],tx=t.tech[x.id],s=tx.steps[si],last=si===3;
+ let dots="";for(let i=0;i<4;i++)dots+=i===si?"●":"○";
+ return `<div class="lesson-top"><button class="back" data-demo="back-home" id="backHome">${t.home}</button><span class="eyebrow">${tx.roman}</span></div>
+ <div class="step box" data-demo="step-card">
+  <div class="eyebrow">${tx.name}</div>
+  <div style="font-size:15px;font-weight:bold;margin-top:2px">${t.step} ${si+1} / 4</div>
+  <div class="fig" role="img" aria-label="${t.fig}" key="${ti}${si}">${x.figs[si]}</div>
+  <div class="ti">${esc(s[0])}</div><div class="de">${esc(s[1])}</div>
+  ${masterSay(s[2],"-step")}
+  <div class="dots" aria-hidden="true">${dots}</div>
+ </div>
+ <div class="nav">
+  <button class="btn ghost" data-demo="prev-btn" id="prev" ${si===0?"disabled style='opacity:.4;cursor:not-allowed'":""}>${t.prev}</button>
+  <button class="btn" data-demo="next-btn" id="next">${last?t.finish:t.next}</button>
+ </div>`;
+}
+
+function certHTML(t){
+ const dt=new Date().toLocaleDateString(lang==="ja"?"ja-JP":"en-US",{year:"numeric",month:"long",day:"numeric"});
+ const nm=name.trim()||t.certYou;
+ return `<div class="lesson-top"><button class="back" data-demo="back-home" id="backHome">${t.home}</button></div>
+ <div class="namebox"><label for="nameIn">${t.nameLabel}</label><input id="nameIn" data-demo="name-input" maxlength="24" placeholder="${esc(t.namePh)}" value="${esc(name)}" autocomplete="off"></div>
+ <div class="cert" data-demo="certificate">
+  <div class="eyebrow">${t.certTop}</div>
+  <h2>${t.certTitle}</h2><div class="big" aria-hidden="true">🥋</div>
+  <div><span class="nm" id="certName">${esc(nm)}</span> ${t.certTo}</div>
+  <p style="font-size:14px;margin:12px 0 0">${t.certBody}</p>
+  <div class="mb"><b style="color:var(--red)">🧓 ${t.certMaster}</b><br>${t.certWords}</div>
+  <div class="date">${dt}</div>
+  <div class="hanko">${t.oss}</div>
+ </div>
+ <div class="nav"><button class="btn ghost" data-demo="print-btn" id="print">${t.print}</button><button class="btn" data-demo="reset-btn" id="reset">${t.reset}</button></div>`;
+}
+
+function bind(){
+ const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
+ on("start",()=>{const i=TECH.findIndex(x=>!done.includes(x.id));openTech(i<0?0:i)});
+ on("certBtn",()=>{view="cert";toast="";render();scrollTo(0,0)});
+ on("backHome",()=>{view="home";render();scrollTo(0,0)});
+ on("reset",()=>{done=[];save();view="home";toast=T().resetMsg;render();scrollTo(0,0)});
+ on("print",()=>{try{window.print()}catch(e){}});
+ on("prev",()=>{if(si>0){si--;render()}});
+ on("next",()=>{
+  if(si<3){si++;render();return}
+  const x=TECH[ti];
+  if(!done.includes(x.id))done.push(x.id);
+  save();
+  if(done.length>=3){view="cert";toast=""}
+  else{view="home";toast=T().toast(T().tech[x.id].name)}
+  render();scrollTo(0,0);
+ });
+ document.querySelectorAll("[data-gj]").forEach(b=>b.onclick=()=>{gj=gj===b.dataset.gj?"breath":b.dataset.gj;render()});
+ document.querySelectorAll(".tech").forEach(b=>b.onclick=()=>openTech(+b.dataset.i));
+ const ni=$("nameIn");
+ if(ni)ni.oninput=()=>{name=ni.value;save();$("certName").textContent=name.trim()||T().certYou};
+}
+function openTech(i){ti=i;si=0;view="lesson";toast="";render();scrollTo(0,0)}
+
+$("logo").onclick=()=>{view="home";render();scrollTo(0,0)};
+document.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{
+ lang=b.dataset.lang;
+ try{localStorage.setItem("lang",lang)}catch(e){}
+ if(toast)toast="";
+ render();
+});
+render();
+</script>
+</body>
+</html>
